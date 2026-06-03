@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digibusiness - Your Premier E-Commerce Accelerator</title>
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0a1128;
+            --bg-card: rgba(13, 27, 42, 0.85);
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-white: #ffffff;
+            --text-muted: #cbd5e1;
+            --accent-orange: #f97316;
+            --accent-blue: #38bdf8;
+            --success-green: #22c55e;
+            --border-glow: rgba(212, 175, 55, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, rgba(24, 48, 89, 0.8), transparent), 
+                              radial-gradient(circle at bottom left, rgba(10, 17, 40, 1), rgba(15, 32, 67, 0.9));
+            background-attachment: fixed;
+        }
+
+        /* Container & Alignment */
+        .page-view {
+            display: none !important;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .page-view.active {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-view.active {
+            display: block !important;
+        }
+
+        .flex-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            color: var(--gold-primary);
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .brand-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .brand-subtitle {
+            color: var(--text-white);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* Forms & Inputs */
+        .glass-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 550px;
+            width: 100%;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+        }
+
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa8413 100%);
+            color: #050a18;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
+        }
+
+        .btn-gold:active {
+            transform: translateY(1px);
+        }
+
+        /* Step 2: Pop / Imagination Screen */
+        #view-imagination {
+            background: radial-gradient(circle, rgba(16,37,76,1) 0%, rgba(5,10,24,1) 100%);
+        }
+
+        .pop-container {
+            text-align: center;
+            max-width: 700px;
+            animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleUp {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .creative-tagline {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin: 30px 0 40px 0;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        /* Step 3: Main Dashboard Content */
+        .dashboard-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px 10px;
+            width: 100%;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 30px;
+        }
+
+        .grid-3-col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            align-items: stretch;
+        }
+
+        /* Service Suite Styling */
+        .suite-card {
+            background: rgba(11, 22, 44, 0.8);
+            border-left: 4px solid var(--gold-primary);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .suite-title {
+            font-size: 1.4rem;
+            color: var(--gold-primary);
+            text-align: left;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .service-item {
+            margin-bottom: 20px;
+        }
+
+        .service-item h4 {
+            text-align: left;
+            color: var(--text-white);
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .service-item h4::before {
+            content: "✦";
+            color: var(--gold-primary);
+        }
+
+        .service-item p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding-left: 18px;
+            line-height: 1.4;
+        }
+
+        /* Fee Scale Table Styling */
+        .fee-card {
+            background: rgba(14, 28, 54, 0.9);
+            border: 1px solid var(--gold-primary);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .fee-table th, .fee-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .fee-table th {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .fee-table td {
+            font-size: 1rem;
+        }
+
+        .strike-price {
+            text-decoration: line-through;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: normal;
+        }
+
+        .promo-price {
+            color: var(--accent-orange);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Growth Plans Styling */
+        .plans-card {
+            background: rgba(11, 22, 44, 0.8);
+            border-right: 4px solid var(--gold-primary);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .plan-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .plan-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .plan-header {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .plan-price {
+            color: var(--accent-blue);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        .plan-features li {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success-green);
+        }
+
+        /* Bottom Control Action Footer */
+        .bottom-action-bar {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(13, 27, 42, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .notice-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* Step 4: Contact Modal / Screen Layout */
+        .contact-box {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.3);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-phone {
+            font-size: 3rem;
+            color: var(--gold-light);
+            font-weight: 800;
+            margin: 25px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(243, 229, 171, 0.3);
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .vns-office {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: var(--accent-blue);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .grid-3-col {
+                grid-template-columns: 1fr;
+            }
+            .brand-title {
+                font-size: 2.5rem;
+            }
+            .contact-phone {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="view-login" class="page-view flex-center active">
+        <div class="glass-panel">
+            <h1 class="brand-title">Digibusiness</h1>
+            <p class="brand-subtitle">Your Premier E-Commerce Accelerator</p>
+            <h3 style="color: white; margin-bottom: 25px;">Welcome to Digital Onboarding</h3>
+            
+            <button type="button" id="login-submit-btn" class="btn-gold" style="font-size: 1.2rem; padding: 18px 50px;">
+                Enter Website
+            </button>
+        </div>
+    </div>
+
+
+    <div id="view-imagination" class="page-view flex-center">
+        <div class="pop-container">
+            <h1 class="brand-title" style="font-size: 4rem; margin-bottom: 10px;">Digibusiness</h1>
+            <h3 style="color: white; font-weight: normal; letter-spacing: 2px;">YOUR PREMIER E-COMMERCE ACCELERATOR</h3>
+            
+            <div>
+                <p class="creative-tagline">
+                    "Bring your business online, boost your sales! <br>
+                    Your city's products will now be sold across India."
+                </p>
+            </div>
+
+            <button type="button" id="upgrade-btn" class="btn-gold" style="font-size: 1.3rem; padding: 18px 45px;">
+                🚀 Upgrade to E-Commerce
+            </button>
+        </div>
+    </div>
+
+
+    <div id="view-dashboard" class="page-view dashboard-view">
+        <div class="dashboard-container">
+            
+            <div class="header-section">
+                <h1 class="brand-title">Digibusiness Dashboard</h1>
+                <p class="brand-subtitle" style="margin-bottom: 0;">E-Commerce Acceleration Architecture Matrix</p>
+            </div>
+
+            <div class="grid-3-col">
+                
+                <div class="suite-card">
+                    <h3 class="suite-title">Our Comprehensive Service Suite</h3>
+                    
+                    <div class="service-item">
+                        <h4>Premium Product Photography</h4>
+                        <p>High-Resolution Studio Shots, 360-Degree Views & Close-ups, Product & Lifestyle Imagery.</p>
+                    </div>
+
+                    <div class="service-item">
+                        <h4>Search-Optimized Copywriting</h4>
+                        <p>Engaging title & description structures planned explicitly to retain organic customer visibility.</p>
+                    </div>
+
+                    <div class="service-item">
+                        <h4>Advanced Keyword Research</h4>
+                        <p>Niche Audience Targeting, Competitor Keyword Analysis, and Ranking Strategy Formulation.</p>
+                    </div>
+
+                    <div class="service-item">
+                        <h4>Full E-Commerce Setup</h4>
+                        <p>Multi-Platform Listing Creation, Bulk Product Upload, and complete Account Health Management.</p>
+                    </div>
+                </div>
+
+                <div class="fee-card">
+                    <div>
+                        <h3 class="suite-title" style="text-align: center;">Professional Listing Fee Scale</h3>
+                        <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                            Scale matrix mapped by base product valuation tier
+                        </p>
+                        
+                        <table class="fee-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Price</th>
+                                    <th>Listing Fee</th>
+                                    <th>Limited Offer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Under ₹100</td>
+                                    <td class="strike-price">₹25</td>
+                                    <td class="promo-price">₹12</td>
+                                </tr>
+                                <tr>
+                                    <td>Under ₹200</td>
+                                    <td class="strike-price">₹35</td>
+                                    <td class="promo-price">₹22</td>
+                                </tr>
+                                <tr>
+                                    <td>Under ₹300</td>
+                                    <td class="strike-price">₹45</td>
+                                    <td class="promo-price">₹32</td>
+                                </tr>
+                                <tr>
+                                    <td>Under ₹400</td>
+                                    <td class="strike-price">₹55</td>
+                                    <td class="promo-price">₹42</td>
+                                </tr>
+                                <tr>
+                                    <td>Under ₹500</td>
+                                    <td class="strike-price">₹65</td>
+                                    <td class="promo-price">₹52</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <p style="text-align: center; font-size: 0.8rem; color: var(--gold-light); margin-top: 15px; font-weight: 600;">
+                        ★ Maximize Profits with Limited Time Promotional Fee Tiers
+                    </p>
+                </div>
+
+                <div class="plans-card">
+                    <h3 class="suite-title">Our Growth Plans</h3>
+                    
+                    <div class="plan-box">
+                        <div class="plan-header">1. Basic Digital Setup Plan</div>
+                        <div class="plan-price">₹599 One-time</div>
+                        <ul class="plan-features">
+                            <li>Official Seller Accordation</li>
+                            <li>Seller ID & GST verification</li>
+                            <li>Bank Integration & Link setup</li>
+                            <li>Location Setup & Courier Pin mapping</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-box">
+                        <div class="plan-header">2. Launch & List Plan</div>
+                        <div class="plan-price">₹599 + Variable Listing Fee</div>
+                        <ul class="plan-features">
+                            <li>Setup & KYC Verification</li>
+                            <li>Title & Description writing</li>
+                            <li>SEO Optimization parameters</li>
+                            <li>Minimum 20 items cataloged</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-box">
+                        <div class="plan-header">3. Complete Store Management</div>
+                        <div class="plan-price">₹499 + 5% Listing Fee per variant + 8% Service Commission</div>
+                        <ul class="plan-features">
+                            <li>Full Multi-Platform Account Creation</li>
+                            <li>Daily Backend Management</li>
+                            <li>Inventory Tracking & Updates</li>
+                            <li>Shipping Labels & Logistics Generation</li>
+                            <li>Direct Customer Communication Management</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="bottom-action-bar">
+                <button type="button" id="dashboard-continue-btn" class="btn-gold" style="padding: 16px 50px; font-size: 1.2rem;">
+                    Continue to Onboarding Completion
+                </button>
+                <div class="notice-text">
+                    *GSTIN, Business PAN, and Business Bank Account REQUIRED for activation. Only the best services provided.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="view-contact" class="page-view flex-center">
+        <div class="glass-panel contact-box">
+            <h2 style="text-transform: uppercase;">Ready to Accelerate?</h2>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 1.1rem;">
+                Contact us for starting your ecommerce business.
+            </p>
+            
+            <div>
+                <a href="tel:+916393637301" class="contact-phone">6393637301</a>
+            </div>
+
+            <button type="button" id="back-to-dash-btn" class="btn-gold" style="padding: 10px 25px; font-size: 0.9rem; background: transparent; border: 1px solid var(--gold-primary); color: var(--gold-primary);">
+                Return to Dashboard Overview
+            </button>
+
+            <div class="vns-office">
+                📍 Head Office: Varanasi, UP, India
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Screen View Hooks
+            const viewLogin = document.getElementById('view-login');
+            const viewImagination = document.getElementById('view-imagination');
+            const viewDashboard = document.getElementById('view-dashboard');
+            const viewContact = document.getElementById('view-contact');
+
+            // Action Triggers
+            const loginSubmitBtn = document.getElementById('login-submit-btn');
+            const upgradeBtn = document.getElementById('upgrade-btn');
+            const dashboardContinueBtn = document.getElementById('dashboard-continue-btn');
+            const backToDashBtn = document.getElementById('back-to-dash-btn');
+
+            // Navigation Controller Function
+            function navigateToView(targetView) {
+                const views = [viewLogin, viewImagination, viewDashboard, viewContact];
+                views.forEach(view => {
+                    view.classList.remove('active');
+                });
+                targetView.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            // Click Actions Layout Mapping
+            loginSubmitBtn.addEventListener('click', () => {
+                navigateToView(viewImagination);
+            });
+
+            upgradeBtn.addEventListener('click', () => {
+                navigateToView(viewDashboard);
+            });
+
+            dashboardContinueBtn.addEventListener('click', () => {
+                navigateToView(viewContact);
+            });
+
+            backToDashBtn.addEventListener('click', () => {
+                navigateToView(viewDashboard);
+            });
+        });
+    </script>
+</body>
+</html>
