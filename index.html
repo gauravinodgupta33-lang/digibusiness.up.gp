@@ -14,8 +14,8 @@
         }
 
         :root {
-            --bg-dark: #0a1128;
-            --bg-card: rgba(13, 27, 42, 0.85);
+            --bg-dark: #050a18;
+            --bg-card: rgba(13, 27, 42, 0.75);
             --gold-primary: #d4af37;
             --gold-light: #f3e5ab;
             --text-white: #ffffff;
@@ -31,10 +31,48 @@
             color: var(--text-white);
             overflow-x: hidden;
             min-height: 100vh;
-            /* Enhanced background gradient to mimic the temple/ghat night sky look */
-            background-image: radial-gradient(circle at top right, rgba(24, 48, 89, 0.9), transparent), 
-                              radial-gradient(circle at bottom left, rgba(10, 17, 40, 1), rgba(19, 42, 87, 0.95));
-            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* VECTORS: Temples, Ghats, Lights, and Stars Background */
+        .scenic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 30%, #132a53 0%, #050a18 100%);
+            overflow: hidden;
+        }
+
+        /* Ambient glowing lights behind temples */
+        .ghat-glow {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 350px;
+            background: radial-gradient(circle at 20% 100%, rgba(212, 175, 55, 0.25), transparent 50%),
+                        radial-gradient(circle at 50% 100%, rgba(249, 115, 22, 0.2), transparent 60%),
+                        radial-gradient(circle at 80% 100%, rgba(212, 175, 55, 0.2), transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Floating background drones matching theme */
+        .bg-drone {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .bg-drone-1 { top: 15%; left: 15%; animation: floatSkyDrone 8s ease-in-out infinite alternate; }
+        .bg-drone-2 { top: 25%; right: 20%; animation: floatSkyDrone 12s ease-in-out infinite alternate-reverse; }
+        .bg-drone-3 { top: 40%; left: 75%; animation: floatSkyDrone 10s ease-in-out infinite alternate; }
+
+        @keyframes floatSkyDrone {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            100% { transform: translate(25px, -30px) scale(1.2); opacity: 0.8; }
         }
 
         /* Container & Alignment */
@@ -45,6 +83,8 @@
             padding: 20px;
             opacity: 1;
             transition: opacity 0.5s ease-in-out;
+            position: relative;
+            z-index: 1;
         }
 
         .page-view.active {
@@ -99,13 +139,12 @@
             padding: 40px;
             max-width: 550px;
             width: 100%;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             text-align: center;
-            position: relative;
         }
 
-        /* Buttons & Containers for Animation */
+        /* Buttons & Dynamic Corners */
         .login-btn-container {
             position: relative;
             display: inline-block;
@@ -133,59 +172,55 @@
             background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
         }
 
-        /* DRONE ELEMENT & ANIMATIONS */
-        .drone {
+        /* CORNER ENTER DRONE */
+        .corner-drone {
             position: absolute;
-            width: 45px;
-            height: 45px;
-            bottom: -50px;
-            right: -50px;
+            width: 50px;
+            height: 50px;
+            bottom: -60px;
+            right: -60px;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.5s ease-out;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
         }
 
-        /* Hovering state when input/view loads */
-        .drone.visible {
+        /* Hovering state next to the enter button */
+        .corner-drone.ready {
             opacity: 1;
             bottom: -15px;
-            right: -25px;
-            animation: droneHover 2s ease-in-out infinite alternate;
+            right: -30px;
+            animation: droneBobbing 2.5s ease-in-out infinite alternate;
         }
 
-        @keyframes droneHover {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-6px) rotate(3deg); }
+        @keyframes droneBobbing {
+            0% { transform: translateY(0) rotate(-3deg); }
+            100% { transform: translateY(-8px) rotate(5deg); }
         }
 
-        /* Fly away animation class applied via JS */
-        .fly-away-action {
-            animation: carryAndFlyAway 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        /* Fly away transition animation sequence */
+        .drone-carry-escape {
+            animation: carryButtonAway 1.5s cubic-bezier(0.3, 0.05, 0.1, 1) forwards !important;
         }
 
-        @keyframes carryAndFlyAway {
+        @keyframes carryButtonAway {
             0% {
                 transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
-            30% {
-                /* Drone hooks onto the button, slight dip down before lifting */
-                transform: translate(-20px, -10px) scale(1.05);
+            25% {
+                /* Snaps inward slightly to secure the button */
+                transform: translate(-15px, -5px) scale(1.05);
                 opacity: 1;
             }
             100% {
-                /* Drones flies up, left, shrinks, and fades out */
-                transform: translate(-600px, -400px) scale(0.3) rotate(-15deg);
+                /* Whistles up and off the left screen edge while shrinking/fading */
+                transform: translate(-800px, -500px) scale(0.2) rotate(-25deg);
                 opacity: 0;
             }
         }
 
         /* Step 2: Pop / Imagination Screen */
-        #view-imagination {
-            background: radial-gradient(circle, rgba(16,37,76,1) 0%, rgba(5,10,24,1) 100%);
-        }
-
         .pop-container {
             text-align: center;
             max-width: 700px;
@@ -229,13 +264,16 @@
         }
 
         /* Service Suite Styling */
-        .suite-card {
-            background: rgba(11, 22, 44, 0.8);
-            border-left: 4px solid var(--gold-primary);
+        .suite-card, .plans-card {
+            background: rgba(6, 13, 29, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 8px;
             padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
+        
+        .suite-card { border-left: 4px solid var(--gold-primary); }
+        .plans-card { border-right: 4px solid var(--gold-primary); }
 
         .suite-title {
             font-size: 1.4rem;
@@ -247,10 +285,7 @@
             padding-bottom: 10px;
         }
 
-        .service-item {
-            margin-bottom: 20px;
-        }
-
+        .service-item { margin-bottom: 20px; }
         .service-item h4 {
             text-align: left;
             color: var(--text-white);
@@ -260,12 +295,7 @@
             align-items: center;
             gap: 8px;
         }
-
-        .service-item h4::before {
-            content: "✦";
-            color: var(--gold-primary);
-        }
-
+        .service-item h4::before { content: "✦"; color: var(--gold-primary); }
         .service-item p {
             font-size: 0.9rem;
             color: var(--text-muted);
@@ -275,61 +305,24 @@
 
         /* Fee Scale Table Styling */
         .fee-card {
-            background: rgba(14, 28, 54, 0.9);
-            border: 1px solid var(--gold-primary);
+            background: rgba(11, 23, 48, 0.9);
+            border: 2px solid var(--gold-primary);
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .fee-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .fee-table th, .fee-table td {
-            padding: 12px 10px;
-            text-align: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-        }
-
-        .fee-table th {
-            background-color: rgba(212, 175, 55, 0.1);
-            color: var(--gold-light);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .fee-table td {
-            font-size: 1rem;
-        }
-
-        .strike-price {
-            text-decoration: line-through;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: normal;
-        }
-
-        .promo-price {
-            color: var(--accent-orange);
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
+        .fee-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .fee-table th, .fee-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.15); }
+        .fee-table th { background-color: rgba(212, 175, 55, 0.15); color: var(--gold-light); font-size: 0.85rem; text-transform: uppercase; }
+        
+        .strike-price { text-decoration: line-through; color: rgba(255, 255, 255, 0.4); }
+        .promo-price { color: var(--accent-orange); font-weight: bold; font-size: 1.1rem; }
 
         /* Growth Plans Styling */
-        .plans-card {
-            background: rgba(11, 22, 44, 0.8);
-            border-right: 4px solid var(--gold-primary);
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
         .plan-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -337,78 +330,31 @@
             padding: 15px;
             margin-bottom: 15px;
         }
-
-        .plan-box:last-child {
-            margin-bottom: 0;
-        }
-
-        .plan-header {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: var(--gold-light);
-            margin-bottom: 8px;
-            text-align: left;
-        }
-
-        .plan-price {
-            color: var(--accent-blue);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .plan-features {
-            list-style: none;
-            padding-left: 5px;
-        }
-
-        .plan-features li {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .plan-features li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--success-green);
-        }
+        .plan-header { font-weight: 700; color: var(--gold-light); margin-bottom: 8px; text-align: left; }
+        .plan-price { color: var(--accent-blue); font-size: 0.95rem; margin-bottom: 10px; font-weight: 600; }
+        .plan-features { list-style: none; padding-left: 5px; }
+        .plan-features li { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; position: relative; padding-left: 15px; }
+        .plan-features li::before { content: "✓"; position: absolute; left: 0; color: var(--success-green); }
 
         /* Bottom Control Action Footer */
         .bottom-action-bar {
             text-align: center;
             margin-top: 40px;
             padding: 20px;
-            background: rgba(13, 27, 42, 0.6);
+            background: rgba(13, 27, 42, 0.8);
             border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
+        .notice-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; font-style: italic; }
 
-        .notice-text {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 15px;
-            font-style: italic;
-        }
-
-        /* Step 4: Contact Modal / Screen Layout */
+        /* Step 4: Contact Modal Layout */
         .contact-box {
             max-width: 600px;
             width: 100%;
             text-align: center;
             border: 2px solid var(--gold-primary);
-            box-shadow: 0 0 35px rgba(212, 175, 55, 0.3);
-            animation: fadeIn 0.5s ease-out;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.4);
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .contact-phone {
             font-size: 3rem;
             color: var(--gold-light);
@@ -419,41 +365,80 @@
             display: inline-block;
             text-decoration: none;
         }
-
-        .vns-office {
-            margin-top: 15px;
-            font-size: 1.1rem;
-            color: var(--accent-blue);
-        }
+        .vns-office { margin-top: 15px; font-size: 1.1rem; color: var(--accent-blue); }
 
         /* Responsive Breakpoints */
         @media (max-width: 768px) {
-            .grid-3-col {
-                grid-template-columns: 1fr;
-            }
-            .brand-title {
-                font-size: 2.5rem;
-            }
-            .contact-phone {
-                font-size: 2.2rem;
-            }
+            .grid-3-col { grid-template-columns: 1fr; }
+            .brand-title { font-size: 2.5rem; }
+            .contact-phone { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- SCENIC ART BACKGROUND: Hand-drawn vectors matching image 60407_2.png -->
+    <div class="scenic-background">
+        <!-- Glowing Lights backdrop -->
+        <div class="ghat-glow"></div>
+
+        <!-- Sky Drones (Floating Ambient Elements) -->
+        <svg class="bg-drone bg-drone-1" viewBox="0 0 24 24" fill="none"><path d="M2 6h20M4 6c0-1 1-2 2-2h12c1 0 2 1 2 2M12 6v6" stroke="#38bdf8" stroke-width="2"/><circle cx="6" cy="12" r="2" fill="#d4af37"/><circle cx="18" cy="12" r="2" fill="#d4af37"/></svg>
+        <svg class="bg-drone bg-drone-2" viewBox="0 0 24 24" fill="none"><path d="M2 6h20M4 6c0-1 1-2 2-2h12c1 0 2 1 2 2M12 6v6" stroke="#38bdf8" stroke-width="2"/><circle cx="6" cy="12" r="2" fill="#f97316"/><circle cx="18" cy="12" r="2" fill="#f97316"/></svg>
+        <svg class="bg-drone bg-drone-3" viewBox="0 0 24 24" fill="none"><path d="M2 6h20M4 6c0-1 1-2 2-2h12c1 0 2 1 2 2M12 6v6" stroke="#38bdf8" stroke-width="2"/><circle cx="6" cy="12" r="2" fill="#d4af37"/><circle cx="18" cy="12" r="2" fill="#d4af37"/></svg>
+
+        <!-- Dynamic Vector Varanasi Temples & Ghats Skyline Layer -->
+        <svg style="position: absolute; bottom: 0; left: 0; width: 100%; height: 320px;" viewBox="0 0 1440 320" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Left Side Smaller Spires & Ghat Steps -->
+            <path d="M0 320V260H40V240H90V210L105 150L120 210V260H160V220L180 120L200 220V260H250V200L275 80L300 200V320H0Z" fill="#0b1731" opacity="0.95"/>
+            <!-- Left Temple Intricate Details (Windows/Spires) -->
+            <path d="M105 150L112 180H98L105 150Z" fill="#d4af37" opacity="0.6"/>
+            <path d="M180 120L188 160H172L180 120Z" fill="#d4af37" opacity="0.6"/>
+            <path d="M275 80L285 130H265L275 80Z" fill="#d4af37" opacity="0.6"/>
+
+            <!-- Center Majestic Main Kashi Vishwanath Style Temple Spire -->
+            <path d="M550 320V180H600V120L630 20L660 120V180H710V320H550Z" fill="#081125"/>
+            <!-- Center Temple Golden Tier Highlights & Glow Shading -->
+            <path d="M630 20L642 70H618L630 20Z" fill="#d4af37" opacity="0.8"/>
+            <path d="M630 50L648 100H612L630 50Z" fill="#aa8413" opacity="0.5"/>
+            <rect x="615" y="130" width="30" height="40" rx="4" fill="#f3e5ab" opacity="0.3"/>
+            <circle cx="630" cy="145" r="5" fill="#f97316"/>
+
+            <!-- Right Side Smaller Temples & Stepped Riverbank Base -->
+            <path d="M1000 320V220H1050V160L1070 70L1090 160V220H1160V190L1185 100L1210 190V240H1270V170L1295 90L1320 170V320H1000Z" fill="#09142c" opacity="0.9"/>
+            <path d="M1070 70L1078 110H1062L1070 70Z" fill="#d4af37" opacity="0.6"/>
+            <path d="M1185 100L1193 140H1177L1185 100Z" fill="#d4af37" opacity="0.5"/>
+            <path d="M1295 90L1303 130H1287L1295 90Z" fill="#d4af37" opacity="0.6"/>
+
+            <!-- Continuous Water Edge / Bottom Ghat Line Alignment -->
+            <rect x="0" y="305" width="1440" height="15" fill="#142649"/>
+            <rect x="0" y="313" width="1440" height="7" fill="#1d3564"/>
+            
+            <!-- Warm Ground Lamps along the Ghat steps -->
+            <circle cx="80" cy="240" r="4" fill="#f3e5ab" filter="drop-shadow(0 0 8px #d4af37)"/>
+            <circle cx="220" cy="260" r="4" fill="#f3e5ab" filter="drop-shadow(0 0 8px #d4af37)"/>
+            <circle cx="510" cy="290" r="5" fill="#f3e5ab" filter="drop-shadow(0 0 10px #f97316)"/>
+            <circle cx="760" cy="290" r="5" fill="#f3e5ab" filter="drop-shadow(0 0 10px #f97316)"/>
+            <circle cx="960" cy="270" r="4" fill="#f3e5ab" filter="drop-shadow(0 0 8px #d4af37)"/>
+            <circle cx="1240" cy="240" r="4" fill="#f3e5ab" filter="drop-shadow(0 0 8px #d4af37)"/>
+        </svg>
+    </div>
+
+    <!-- MAIN PAGE PANELS -->
     <div id="view-login" class="page-view flex-center active">
         <div class="glass-panel">
             <h1 class="brand-title">Digibusiness</h1>
             <p class="brand-subtitle">Your Premier E-Commerce Accelerator</p>
             <h3 style="color: white; margin-bottom: 25px;">Welcome to Digital Onboarding</h3>
             
+            <!-- Container holding the Enter Button and the interactive Drone -->
             <div class="login-btn-container" id="animated-carrier-group">
                 <button type="button" id="login-submit-btn" class="btn-gold" style="font-size: 1.2rem; padding: 18px 50px;">
                     Enter Website
                 </button>
                 
-                <svg class="drone" id="login-drone" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Specialized Entry Animated Corner Drone -->
+                <svg class="corner-drone" id="login-drone" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 6H20M4 6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6M4 6V8C4 8.55228 4.44772 9 5 9H19C19.5523 9 20 8.55228 20 8V6" stroke="#d4af37" stroke-width="2" stroke-linecap="round"/>
                     <circle cx="6" cy="15" r="2" fill="#38bdf8" />
                     <circle cx="18" cy="15" r="2" fill="#38bdf8" />
@@ -587,17 +572,6 @@
                         <div class="plan-header">2. Launch & List Plan</div>
                         <div class="plan-price">₹599 + Variable Listing Fee</div>
                         <ul class="plan-features">
-                            <li>Official Seller Accordation</li>
-                            <li>Seller ID & GST verification</li>
-                            <li>Bank Integration & Link setup</li>
-                            <li>Location Setup & Courier Pin mapping</li>
-                        </ul>
-                    </div>
-
-                    <div class="plan-box">
-                        <div class="plan-header">2. Launch & List Plan</div>
-                        <div class="plan-price">₹599 + Variable Listing Fee</div>
-                        <ul class="plan-features">
                             <li>Setup & KYC Verification</li>
                             <li>Title & Description writing</li>
                             <li>SEO Optimization parameters</li>
@@ -669,14 +643,14 @@
             const dashboardContinueBtn = document.getElementById('dashboard-continue-btn');
             const backToDashBtn = document.getElementById('back-to-dash-btn');
             
-            // Animation Elements
+            // Interactive Drone components
             const loginDrone = document.getElementById('login-drone');
             const carrierGroup = document.getElementById('animated-carrier-group');
 
-            // Automatically reveal the drone hovering right after loading the entry page
+            // Fly in the interactive enter drone slightly after layout settlement
             setTimeout(() => {
-                loginDrone.classList.add('visible');
-            }, 400);
+                loginDrone.classList.add('ready');
+            }, 300);
 
             // Navigation Controller Function
             function navigateToView(targetView) {
@@ -690,20 +664,20 @@
 
             // Click Actions Layout Mapping
             loginSubmitBtn.addEventListener('click', () => {
-                // Step 1: Add the flight class to the entire container holding the button and drone
-                carrierGroup.classList.add('fly-away-action');
+                // Trigger the carry-away takeoff animation combo on button + drone
+                carrierGroup.classList.add('drone-carry-escape');
                 
-                // Step 2: Smoothly fade out the rest of the login screen interface
+                // Fade out current overlay screen panel
                 viewLogin.style.opacity = '0';
 
-                // Step 3: Wait for the flight animation window to complete before jumping views
+                // Sync page switch exactly as the drone speeds out of window frame
                 setTimeout(() => {
                     navigateToView(viewImagination);
                     
-                    // Reset positions cleanly behind the scenes so elements are fresh if returned to
-                    carrierGroup.classList.remove('fly-away-action');
+                    // Reset styling safely in hidden background state
+                    carrierGroup.classList.remove('drone-carry-escape');
                     viewLogin.style.opacity = '1';
-                }, 1300); 
+                }, 1400); 
             });
 
             upgradeBtn.addEventListener('click', () => {
