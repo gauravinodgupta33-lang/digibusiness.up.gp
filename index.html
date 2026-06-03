@@ -31,8 +31,9 @@
             color: var(--text-white);
             overflow-x: hidden;
             min-height: 100vh;
-            background-image: radial-gradient(circle at top right, rgba(24, 48, 89, 0.8), transparent), 
-                              radial-gradient(circle at bottom left, rgba(10, 17, 40, 1), rgba(15, 32, 67, 0.9));
+            /* Enhanced background gradient to mimic the temple/ghat night sky look */
+            background-image: radial-gradient(circle at top right, rgba(24, 48, 89, 0.9), transparent), 
+                              radial-gradient(circle at bottom left, rgba(10, 17, 40, 1), rgba(19, 42, 87, 0.95));
             background-attachment: fixed;
         }
 
@@ -42,7 +43,8 @@
             min-height: 100vh;
             width: 100%;
             padding: 20px;
-            transition: all 0.5s ease-in-out;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .page-view.active {
@@ -100,9 +102,16 @@
             backdrop-filter: blur(12px);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             text-align: center;
+            position: relative;
         }
 
-        /* Buttons */
+        /* Buttons & Containers for Animation */
+        .login-btn-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
         .btn-gold {
             background: linear-gradient(135deg, #d4af37 0%, #aa8413 100%);
             color: #050a18;
@@ -112,7 +121,7 @@
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -124,8 +133,52 @@
             background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
         }
 
-        .btn-gold:active {
-            transform: translateY(1px);
+        /* DRONE ELEMENT & ANIMATIONS */
+        .drone {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            bottom: -50px;
+            right: -50px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease-out;
+            z-index: 10;
+        }
+
+        /* Hovering state when input/view loads */
+        .drone.visible {
+            opacity: 1;
+            bottom: -15px;
+            right: -25px;
+            animation: droneHover 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes droneHover {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-6px) rotate(3deg); }
+        }
+
+        /* Fly away animation class applied via JS */
+        .fly-away-action {
+            animation: carryAndFlyAway 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        }
+
+        @keyframes carryAndFlyAway {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            30% {
+                /* Drone hooks onto the button, slight dip down before lifting */
+                transform: translate(-20px, -10px) scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                /* Drones flies up, left, shrinks, and fades out */
+                transform: translate(-600px, -400px) scale(0.3) rotate(-15deg);
+                opacity: 0;
+            }
         }
 
         /* Step 2: Pop / Imagination Screen */
@@ -395,9 +448,20 @@
             <p class="brand-subtitle">Your Premier E-Commerce Accelerator</p>
             <h3 style="color: white; margin-bottom: 25px;">Welcome to Digital Onboarding</h3>
             
-            <button type="button" id="login-submit-btn" class="btn-gold" style="font-size: 1.2rem; padding: 18px 50px;">
-                Enter Website
-            </button>
+            <div class="login-btn-container" id="animated-carrier-group">
+                <button type="button" id="login-submit-btn" class="btn-gold" style="font-size: 1.2rem; padding: 18px 50px;">
+                    Enter Website
+                </button>
+                
+                <svg class="drone" id="login-drone" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H20M4 6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6M4 6V8C4 8.55228 4.44772 9 5 9H19C19.5523 9 20 8.55228 20 8V6" stroke="#d4af37" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="6" cy="15" r="2" fill="#38bdf8" />
+                    <circle cx="18" cy="15" r="2" fill="#38bdf8" />
+                    <path d="M12 9V14M12 14H8M12 14H16" stroke="#f3e5ab" stroke-width="1.5"/>
+                    <line x1="3" y1="3" x2="9" y2="3" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="15" y1="3" x2="21" y2="3" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
         </div>
     </div>
 
@@ -523,6 +587,17 @@
                         <div class="plan-header">2. Launch & List Plan</div>
                         <div class="plan-price">₹599 + Variable Listing Fee</div>
                         <ul class="plan-features">
+                            <li>Official Seller Accordation</li>
+                            <li>Seller ID & GST verification</li>
+                            <li>Bank Integration & Link setup</li>
+                            <li>Location Setup & Courier Pin mapping</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-box">
+                        <div class="plan-header">2. Launch & List Plan</div>
+                        <div class="plan-price">₹599 + Variable Listing Fee</div>
+                        <ul class="plan-features">
                             <li>Setup & KYC Verification</li>
                             <li>Title & Description writing</li>
                             <li>SEO Optimization parameters</li>
@@ -593,6 +668,15 @@
             const upgradeBtn = document.getElementById('upgrade-btn');
             const dashboardContinueBtn = document.getElementById('dashboard-continue-btn');
             const backToDashBtn = document.getElementById('back-to-dash-btn');
+            
+            // Animation Elements
+            const loginDrone = document.getElementById('login-drone');
+            const carrierGroup = document.getElementById('animated-carrier-group');
+
+            // Automatically reveal the drone hovering right after loading the entry page
+            setTimeout(() => {
+                loginDrone.classList.add('visible');
+            }, 400);
 
             // Navigation Controller Function
             function navigateToView(targetView) {
@@ -606,7 +690,20 @@
 
             // Click Actions Layout Mapping
             loginSubmitBtn.addEventListener('click', () => {
-                navigateToView(viewImagination);
+                // Step 1: Add the flight class to the entire container holding the button and drone
+                carrierGroup.classList.add('fly-away-action');
+                
+                // Step 2: Smoothly fade out the rest of the login screen interface
+                viewLogin.style.opacity = '0';
+
+                // Step 3: Wait for the flight animation window to complete before jumping views
+                setTimeout(() => {
+                    navigateToView(viewImagination);
+                    
+                    // Reset positions cleanly behind the scenes so elements are fresh if returned to
+                    carrierGroup.classList.remove('fly-away-action');
+                    viewLogin.style.opacity = '1';
+                }, 1300); 
             });
 
             upgradeBtn.addEventListener('click', () => {
